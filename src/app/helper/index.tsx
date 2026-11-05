@@ -1,26 +1,52 @@
 import { Link } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, radii, spacing } from '@/constants/theme';
+import { useAuth } from '@/context/AuthContext';
 
 /**
- * 도우미 홈 (H-01 이후) — 1차 개발용 임시 화면
- * - 승인된 도우미만 예약에 지원할 수 있다는 원칙을 안내합니다.
+ * 도우미 홈
+ * - 로그인 전: 가입/로그인 안내
+ * - 로그인 후: 승인 전 지원 불가 원칙 안내
  */
 export default function HelperHomeScreen() {
+  const { currentUser, signOut } = useAuth();
+  const isHelper = currentUser?.role === 'helper';
+
+  if (!isHelper) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>도우미로 시작하기</Text>
+        <Text style={styles.body}>
+          동행 지원에 참여하려면 먼저 로그인하거나 회원가입해 주세요.
+        </Text>
+
+        <Link href="/helper/login" style={styles.primaryLink}>
+          <Text style={styles.primaryLinkText}>로그인</Text>
+        </Link>
+        <Link href="/helper/signup" style={styles.secondaryLink}>
+          <Text style={styles.secondaryLinkText}>회원가입</Text>
+        </Link>
+
+        <Link href="/" style={styles.backLink}>
+          <Text style={styles.backText}>역할 선택으로 돌아가기</Text>
+        </Link>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>안녕하세요, 도우미님</Text>
+      <Text style={styles.title}>안녕하세요, {currentUser.name}님</Text>
       <Text style={styles.body}>
-        프로필을 등록하고 운영자 승인을 받은 뒤에야 동행 예약에 지원할 수
-        있습니다.
+        로그인되었습니다. 다음 단계에서 프로필 등록과 승인 상태 화면을 만들
+        예정입니다.
       </Text>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>다음으로 만들 기능</Text>
-        <Text style={styles.cardItem}>· 회원가입 및 본인 확인</Text>
-        <Text style={styles.cardItem}>· 프로필·활동 지역/시간 등록</Text>
-        <Text style={styles.cardItem}>· 승인 상태 확인</Text>
+        <Text style={styles.cardTitle}>내 계정</Text>
+        <Text style={styles.cardItem}>역할: 도우미</Text>
+        <Text style={styles.cardItem}>이메일: {currentUser.email}</Text>
       </View>
 
       <View style={styles.notice}>
@@ -28,6 +54,10 @@ export default function HelperHomeScreen() {
           중요: 승인되지 않은 도우미는 예약에 지원할 수 없습니다.
         </Text>
       </View>
+
+      <Pressable style={styles.logoutButton} onPress={signOut}>
+        <Text style={styles.logoutText}>로그아웃</Text>
+      </Pressable>
 
       <Link href="/" style={styles.backLink}>
         <Text style={styles.backText}>역할 선택으로 돌아가기</Text>
@@ -52,6 +82,31 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.textMuted,
     marginBottom: spacing.lg,
+  },
+  primaryLink: {
+    backgroundColor: colors.helperAccent,
+    borderRadius: radii.md,
+    paddingVertical: spacing.md,
+    alignItems: 'center',
+    marginBottom: spacing.sm,
+  },
+  primaryLinkText: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  secondaryLink: {
+    borderWidth: 1,
+    borderColor: colors.helperAccent,
+    borderRadius: radii.md,
+    paddingVertical: spacing.md,
+    alignItems: 'center',
+    marginBottom: spacing.lg,
+  },
+  secondaryLinkText: {
+    color: colors.helperAccent,
+    fontSize: 17,
+    fontWeight: '700',
   },
   card: {
     backgroundColor: colors.surface,
@@ -82,6 +137,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     color: colors.danger,
+  },
+  logoutButton: {
+    alignSelf: 'flex-start',
+    paddingVertical: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  logoutText: {
+    color: colors.danger,
+    fontSize: 15,
+    fontWeight: '600',
   },
   backLink: {
     alignSelf: 'flex-start',

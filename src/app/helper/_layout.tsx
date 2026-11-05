@@ -4,7 +4,6 @@ import { colors } from '@/constants/theme';
 
 /**
  * 도우미(Helper) 영역 레이아웃
- * - 도우미 전용 화면들을 묶는 네비게이션입니다.
  */
 export default function HelperLayout() {
   return (
@@ -17,6 +16,8 @@ export default function HelperLayout() {
       }}
     >
       <Stack.Screen name="index" options={{ title: '도우미 홈' }} />
+      <Stack.Screen name="login" options={{ title: '도우미 로그인' }} />
+      <Stack.Screen name="signup" options={{ title: '도우미 회원가입' }} />
     </Stack>
   );
 }

@@ -4,7 +4,6 @@ import { colors } from '@/constants/theme';
 
 /**
  * 부모(Parent) 영역 레이아웃
- * - 부모 전용 화면들을 묶는 네비게이션입니다.
  */
 export default function ParentLayout() {
   return (
@@ -17,6 +16,8 @@ export default function ParentLayout() {
       }}
     >
       <Stack.Screen name="index" options={{ title: '부모 홈' }} />
+      <Stack.Screen name="login" options={{ title: '부모 로그인' }} />
+      <Stack.Screen name="signup" options={{ title: '부모 회원가입' }} />
     </Stack>
   );
 }
