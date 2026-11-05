@@ -1,4 +1,4 @@
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, radii, spacing } from '@/constants/theme';
@@ -10,6 +10,7 @@ import { useAuth } from '@/context/AuthContext';
  * - 로그인 후에는 다음 기능(자녀 등록 등) 안내
  */
 export default function ParentHomeScreen() {
+  const router = useRouter();
   const { currentUser, signOut } = useAuth();
   const isParent = currentUser?.role === 'parent';
 
@@ -21,12 +22,19 @@ export default function ParentHomeScreen() {
           자녀 동행 예약을 하려면 먼저 로그인하거나 회원가입해 주세요.
         </Text>
 
-        <Link href="/parent/login" style={styles.primaryLink}>
-          <Text style={styles.primaryLinkText}>로그인</Text>
-        </Link>
-        <Link href="/parent/signup" style={styles.secondaryLink}>
-          <Text style={styles.secondaryLinkText}>회원가입</Text>
-        </Link>
+        <Pressable
+          style={styles.primaryButton}
+          onPress={() => router.push('/parent/login')}
+        >
+          <Text style={styles.primaryButtonText}>로그인</Text>
+        </Pressable>
+
+        <Pressable
+          style={styles.secondaryButton}
+          onPress={() => router.push('/parent/signup')}
+        >
+          <Text style={styles.secondaryButtonText}>회원가입</Text>
+        </Pressable>
 
         <Link href="/" style={styles.backLink}>
           <Text style={styles.backText}>역할 선택으로 돌아가기</Text>
@@ -82,30 +90,34 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginBottom: spacing.lg,
   },
-  primaryLink: {
+  primaryButton: {
     backgroundColor: colors.parentAccent,
     borderRadius: radii.md,
     paddingVertical: spacing.md,
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: spacing.sm,
   },
-  primaryLinkText: {
+  primaryButtonText: {
     color: '#FFFFFF',
     fontSize: 17,
     fontWeight: '700',
+    textAlign: 'center',
   },
-  secondaryLink: {
+  secondaryButton: {
     borderWidth: 1,
     borderColor: colors.parentAccent,
     borderRadius: radii.md,
     paddingVertical: spacing.md,
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: spacing.lg,
   },
-  secondaryLinkText: {
+  secondaryButtonText: {
     color: colors.parentAccent,
     fontSize: 17,
     fontWeight: '700',
+    textAlign: 'center',
   },
   card: {
     backgroundColor: colors.surface,
