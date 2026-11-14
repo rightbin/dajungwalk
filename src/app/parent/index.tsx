@@ -3,15 +3,17 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, radii, spacing } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
+import { useChildren } from '@/context/ChildContext';
 
 /**
  * 부모 메인 홈 (P-03)
  * - 로그인 전에는 가입/로그인 안내
- * - 로그인 후에는 다음 기능(자녀 등록 등) 안내
+ * - 로그인 후에는 자녀 관리로 이동
  */
 export default function ParentHomeScreen() {
   const router = useRouter();
   const { currentUser, signOut } = useAuth();
+  const { getChildrenByParent } = useChildren();
   const isParent = currentUser?.role === 'parent';
 
   if (!isParent) {
@@ -43,11 +45,14 @@ export default function ParentHomeScreen() {
     );
   }
 
+  const childCount = getChildrenByParent(currentUser.id).length;
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>안녕하세요, {currentUser.name}님</Text>
       <Text style={styles.body}>
-        로그인되었습니다. 다음 단계에서 자녀 등록 화면을 만들 예정입니다.
+        등록된 자녀 {childCount}명 · 다음으로 도우미 프로필·예약 신청을 만들
+        예정입니다.
       </Text>
 
       <View style={styles.card}>
@@ -56,9 +61,16 @@ export default function ParentHomeScreen() {
         <Text style={styles.cardItem}>이메일: {currentUser.email}</Text>
       </View>
 
+      <Pressable
+        style={styles.primaryButton}
+        onPress={() => router.push('/parent/children')}
+      >
+        <Text style={styles.primaryButtonText}>자녀 관리</Text>
+      </Pressable>
+
       <View style={styles.card}>
         <Text style={styles.cardTitle}>다음으로 만들 기능</Text>
-        <Text style={styles.cardItem}>· 자녀 등록</Text>
+        <Text style={styles.cardItem}>· 도우미 프로필·승인</Text>
         <Text style={styles.cardItem}>· 예약 신청</Text>
       </View>
 

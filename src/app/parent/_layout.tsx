@@ -18,6 +18,7 @@ export default function ParentLayout() {
       <Stack.Screen name="index" options={{ title: '부모 홈' }} />
       <Stack.Screen name="login" options={{ title: '부모 로그인' }} />
       <Stack.Screen name="signup" options={{ title: '부모 회원가입' }} />
+      <Stack.Screen name="children" options={{ headerShown: false }} />
     </Stack>
   );
 }
